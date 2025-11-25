@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <title>Trung tâm Hỗ trợ - Klinik</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    
+    <link href="img/favicon.ico" rel="icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&family=Roboto:wght@500;700;900&display=swap" rel="stylesheet"> 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <style>
+        /* === CSS CHO PHẦN CHAT WIDGET === */
+        #chat-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            height: 450px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 9999;
+            display: none; /* Mặc định ẩn */
+            flex-direction: column;
+            overflow: hidden;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .chat-header {
+            background: #007bff;
+            color: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-header .doctor-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 2px solid white;
+        }
+
+        .chat-header h5 {
+            font-size: 16px;
+            margin: 0;
+            color: white;
+        }
+
+        .chat-header small {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .btn-close-chat {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .chat-body {
+            flex: 1;
+            padding: 15px;
+            background: #f8f9fa;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-size: 14px;
+            line-height: 1.4;
+            position: relative;
+        }
+
+        .message.doctor {
+            background: #e9ecef;
+            color: #333;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        .message.user {
+            background: #007bff;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .typing-indicator {
+            font-size: 12px;
+            color: #6c757d;
+            margin-left: 10px;
+            display: none;
+        }
+
+        .chat-footer {
+            padding: 10px;
+            border-top: 1px solid #eee;
+            display: flex;
+            background: white;
+        }
+
+        .chat-footer input {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 8px 15px;
+            outline: none;
+            margin-right: 10px;
+        }
+
+        .chat-footer button {
+            background: #007bff;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+
+        .chat-footer button:hover {
+            background: #0056b3;
+        }
+
+        /* === CSS MỚI CHO PHẦN SEARCH GOOGLE === */
+        .search-box {
+            border-radius: 50px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            background: white;
+        }
+        
+        .search-box:hover, .search-box:focus-within {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2) !important;
+        }
+
+        #googleSearchInput:focus {
+            box-shadow: none;
+            outline: none;
+        }
+
+        .search-tag {
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 20px;
+            margin: 0 4px;
+            transition: all 0.2s;
+            border: 1px solid rgba(255,255,255,0.3);
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+
+        .search-tag:hover {
+            background-color: white !important;
+            color: #0d6efd !important; /* Màu primary */
+            transform: scale(1.05);
+        }
+        /* === CSS MỚI CHO GIAO DIỆN CUỘC GỌI === */
+.chat-header .chat-actions button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.chat-header .chat-actions button:hover {
+    transform: scale(1.2);
+    color: #ffeb3b;
+}
+
+/* Màn hình cuộc gọi đè lên chat-body */
+#call-overlay {
+    position: absolute;
+    top: 70px; /* Chiều cao header */
+    left: 0;
+    width: 100%;
+    height: calc(100% - 130px); /* Trừ header và footer */
+    background: #2c3e50;
+    z-index: 1000;
+    display: none; /* Ẩn mặc định */
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+#video-stream {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    display: none;
+}
+
+.call-info {
+    z-index: 2;
+    text-align: center;
+    color: white;
+    margin-top: 20px;
+}
+
+.call-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid white;
+    margin-bottom: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+.call-status {
+    font-size: 14px;
+    opacity: 0.8;
+    margin-bottom: 5px;
+}
+
+.call-timer {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.call-controls {
+    z-index: 2;
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.control-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-mute { background: rgba(255,255,255,0.2); color: white; }
+.btn-mute:hover { background: rgba(255,255,255,0.4); }
+
+.btn-end { background: #ff4757; color: white; }
+.btn-end:hover { background: #ff6b81; transform: scale(1.1); }
+    </style>
+</head>
+
+<body>
+    
+    <!-- Navbar Start -->
+    <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0 wow fadeIn" data-wow-delay="0.1s">
+        <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+            <h1 class="m-0 text-primary"><i class="far fa-hospital me-3"></i>Klinik</h1>
+        </a>
+
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+                <a href="index.html" class="nav-item nav-link active">Trang chủ</a>
+                <a href="about.html" class="nav-item nav-link">Về chúng tôi</a>
+                <a href="service.html" class="nav-item nav-link">Dịch vụ</a>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Trang</a>
+                    <div class="dropdown-menu rounded-0 rounded-bottom m-0">
+                        <a href="feature.html" class="dropdown-item">Tính năng</a>
+                        <a href="team.html" class="dropdown-item">Bác sĩ</a>
+                        <a href="testimonial.html" class="dropdown-item">Lời chứng thực</a>
+                    </div>
+                </div>
+                <a href="contact.html" class="nav-item nav-link">Liên hệ</a>
+            </div>
+
+            <button id="openLoginBtn" class="btn btn-dark rounded-0 py-4 px-lg-4 d-none d-lg-block me-2" style="border: none;">
+                <i class="fa fa-user me-2"></i> Đăng nhập
+            </button>
+
+            <a href="appointment.html" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">
+                Cuộc hẹn<i class="fa fa-arrow-right ms-3"></i>
+            </a>
+        </div>
+    </nav>
+    <!-- Navbar End -->
+
+
+    <!-- account start -->
+     <div class="modal-overlay" id="mainModal">
+        <div class="login-container">
+            <span class="close-btn" id="closeModalBtn">&times;</span>
+
+            <div id="loginForm">
+                <h2>Đăng nhập</h2>
+                <br>
+                <div class="input-group">
+                    <input type="text" id="loginPhone" placeholder="Nhập số điện thoại">
+                </div>
+                <div class="input-group">
+                    <input type="password" id="loginPass" placeholder="Mật khẩu">
+                </div>
+                <div style="text-align: right; margin-bottom: 25px;">
+                    <a href="#" id="linkToForgot" style="font-size: 13px; color: #1d4ed8; text-decoration: none;">Quên mật khẩu?</a>
+                </div>
+                <button class="btn-primary" id="btnLoginAction">Đăng nhập</button>
+                <div class="register-section" style="margin-top: 20px;">
+                    Chưa có tài khoản? <a href="#" id="linkToRegister">Đăng ký ngay</a>
+                </div>
+            </div>
+
+            <div id="registerForm" class="hidden">
+                <h2>Tạo tài khoản</h2>
+                <p class="sub-text">Điền thông tin chính xác</p>
+                <div class="input-group"><input type="text" id="regName" placeholder="Họ và tên đầy đủ"></div>
+                <div class="input-group"><input type="text" id="regPhone" placeholder="Số điện thoại"></div>
+                <div class="input-group"><input type="number" id="regCCCD" placeholder="Số CCCD/CMND"></div>
+                <div class="input-group">
+                    <label style="font-size: 12px; color: #666; display: block; text-align: left; margin-bottom: 5px; margin-left: 5px;">Ngày sinh:</label>
+                    <input type="date" id="regDOB" style="color: #333;">
+                </div>
+                <div class="input-group"><input type="password" id="regPass" placeholder="Mật khẩu (tối thiểu 6 ký tự)"></div>
+                <div class="input-group"><input type="password" id="regConfirmPass" placeholder="Nhập lại mật khẩu"></div>
+                <button class="btn-primary" id="btnRegisterAction">Đăng ký</button>
+                <div class="register-section" style="margin-top: 15px;">
+                    Đã có tài khoản? <a href="#" id="linkToLoginFromRegister">Đăng nhập</a>
+                </div>
+            </div>
+
+            <div id="forgotForm" class="hidden">
+                <h2>Xác minh danh tính</h2>
+                <div class="input-group"><input type="text" id="verifyName" placeholder="Họ và tên"></div>
+                <div class="input-group"><input type="number" id="verifyCCCD" placeholder="Số CCCD"></div>
+                <div class="input-group"><input type="date" id="verifyDOB"></div>
+                <button class="btn-primary" id="btnCheckInfo">Kiểm tra thông tin</button>
+                <div class="register-section"><a href="#" id="linkBackToLogin1">Quay lại đăng nhập</a></div>
+            </div>
+
+            <div id="newPassForm" class="hidden">
+                <h2>Tạo mật khẩu mới</h2>
+                <div class="input-group"><input type="password" id="newPassMain" placeholder="Mật khẩu mới"></div>
+                <div class="input-group"><input type="password" id="newPassConfirm" placeholder="Nhập lại mật khẩu mới"></div>
+                <button class="btn-primary" id="btnChangePass">Lưu mật khẩu</button>
+            </div>
+        </div>
+    </div>
+    <!-- account end -->
+
+
+    <!-- menu account start -->
+     <div class="modal-overlay" id="userMenuModal" style="z-index: 99999;">
+    <div class="login-container" style="width: 380px; padding: 40px 30px;">
+        <span class="close-btn" onclick="document.getElementById('userMenuModal').classList.remove('active')">&times;</span>
+        
+        <div class="text-center mb-4">
+            <div style="width: 80px; height: 80px; background: #EFF5FF; color: #0463FA; font-size: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; border: 2px solid #0463FA;">
+                <i class="fa fa-user"></i>
+            </div>
+            <h4 id="menuUserName" style="margin: 0; color: #1B2C51;">Xin chào!</h4>
+            <p class="text-muted" style="font-size: 14px;">Thành viên thân thiết</p>
+        </div>
+
+        <div class="d-grid gap-3">
+            <button onclick="openHistoryFromMenu()" class="btn btn-light py-3 text-start shadow-sm" style="border: 1px solid #eee; transition: 0.3s;">
+                <i class="fa fa-history me-3 text-primary"></i> Xem Lịch sử Đặt hẹn
+            </button>
+            
+            <button onclick="logout()" class="btn btn-light py-3 text-start shadow-sm" style="border: 1px solid #eee; color: #dc3545; transition: 0.3s;">
+                <i class="fa fa-sign-out-alt me-3"></i> Đăng xuất tài khoản
+            </button>
+        </div>
+    </div>
+</div>
+<!-- menu account end -->
+
+
+<!-- appointment history start -->
+     <div class="modal-overlay" id="historyModal" style="z-index: 99999;">
+    <div class="login-container" style="width: 600px; max-width: 95%;">
+        <span class="close-btn" onclick="document.getElementById('historyModal').classList.remove('active')">&times;</span>
+        <h2 class="mb-4">Lịch sử khám bệnh</h2>
+        <div style="max-height: 300px; overflow-y: auto; text-align: left;">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Ngày/Giờ</th>
+                        <th>Bác sĩ</th>
+                        <th>Trạng thái</th>
+                    </tr>
+                </thead>
+                <tbody id="historyTableBody">
+                    </tbody>
+            </table>
+            <p id="noHistoryMsg" class="text-center text-muted">Chưa có lịch sử đặt hẹn nào.</p>
+        </div>
+    </div>
+</div>
+<!-- appointment history end -->
+
+
+<!-- Notification start -->
+ <div class="modal-overlay" id="customAlertModal" style="z-index: 100000;">
+    <div class="login-container" style="width: 400px; padding: 30px; text-align: center;">
+        <div id="alertIconContainer" style="font-size: 50px; margin-bottom: 20px;">
+            <i id="alertIcon" class="fa-solid fa-circle-exclamation text-danger"></i>
+        </div>
+
+        <h3 id="alertTitle" style="margin-bottom: 10px; color: #333;">Thông báo</h3>
+        <p id="alertMessage" class="text-muted" style="margin-bottom: 25px; font-size: 16px;">Nội dung thông báo...</p>
+
+        <button onclick="closeCustomAlert()" class="btn btn-primary w-100 py-2" style="border-radius: 50px; font-weight: bold;">
+            Đã hiểu
+        </button>
+    </div>
+</div>
+ <!-- Notification end -->
+
+    <div class="container-fluid page-header py-5 mb-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container py-5">
+            <h1 class="display-3 text-white mb-3 animated slideInDown">Trung tâm Hỗ trợ (Help Center)</h1>
+            <nav aria-label="breadcrumb animated slideInDown">
+                <ol class="breadcrumb text-uppercase mb-0">
+                    <li class="breadcrumb-item"><a class="text-white" href="index.html">Trang chủ</a></li>
+                    <li class="breadcrumb-item text-primary active" aria-current="page">Hỗ trợ</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container-fluid bg-primary py-5 mb-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container text-center py-5">
+            <h2 class="text-white mb-4 display-5 fw-bold">Chúng tôi có thể giúp gì cho bạn?</h2>
+            <p class="text-white-50 mb-4">Tra cứu bệnh lý, đặt lịch hẹn, hoặc tìm hiểu về bảo hiểm</p>
+            
+            <div class="mx-auto search-wrapper" style="max-width: 700px; position: relative;">
+                <div class="input-group search-box shadow-lg">
+                    <span class="input-group-text bg-white border-0 ps-4">
+                        <i class="fa fa-search text-primary"></i>
+                    </span>
+                    <input type="text" id="googleSearchInput" class="form-control border-0 p-4 fs-5" 
+                           placeholder="Nhập triệu chứng, tên bác sĩ, hoặc dịch vụ..." 
+                           onkeypress="handleSearchEnter(event)">
+                    <button class="btn btn-dark px-4 fw-bold" onclick="executeGoogleSearch()">
+                        Tìm trên Google <i class="fab fa-google ms-2"></i>
+                    </button>
+                </div>
+    
+                <div class="mt-3 text-white">
+                    <small class="me-2">Phổ biến:</small>
+                    <span class="badge bg-white text-primary bg-opacity-10 search-tag" onclick="quickSearch('Đặt lịch khám')">Đặt lịch khám</span>
+                    <span class="badge bg-white text-primary bg-opacity-10 search-tag" onclick="quickSearch('Bảng giá dịch vụ')">Bảng giá</span>
+                    <span class="badge bg-white text-primary bg-opacity-10 search-tag" onclick="quickSearch('Bảo hiểm y tế')">Bảo hiểm</span>
+                    <span class="badge bg-white text-primary bg-opacity-10 search-tag" onclick="quickSearch('Triệu chứng đau đầu')">Đau đầu</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-8 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="mb-5">
+                        <h3 class="mb-4 text-primary border-bottom pb-2">1. Quy trình Khám bệnh & Đặt lịch</h3>
+                        <div class="accordion" id="accordionBooking">
+                            <div class="accordion-item mb-3 border rounded">
+                                <h2 class="accordion-header" id="headingOne">
+                                    <button class="accordion-button fs-5 fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                                        Làm sao để đặt lịch khám nhanh nhất?
+                                    </button>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionBooking">
+                                    <div class="accordion-body">
+                                        <p>Để tiết kiệm thời gian chờ đợi, bạn có thể đặt lịch qua 3 kênh chính:</p>
+                                        <ul>
+                                            <li><strong>Website:</strong> Truy cập mục <a href="appointment.html">Cuộc hẹn</a> và điền thông tin.</li>
+                                            <li><strong>Hotline:</strong> Gọi 0985188888 (Hỗ trợ 24/7).</li>
+                                            <li><strong>Ứng dụng:</strong> Tải app Klinik trên iOS/Android để đặt lịch và theo dõi hồ sơ.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item mb-3 border rounded">
+                                <h2 class="accordion-header" id="headingOneB">
+                                    <button class="accordion-button collapsed fs-5 fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOneB">
+                                        Tôi cần mang giấy tờ gì khi đi khám?
+                                    </button>
+                                </h2>
+                                <div id="collapseOneB" class="accordion-collapse collapse" data-bs-parent="#accordionBooking">
+                                    <div class="accordion-body">
+                                        Vui lòng mang theo: CCCD/CMND, Thẻ Bảo hiểm y tế (nếu có), và các kết quả xét nghiệm/đơn thuốc cũ.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <h3 class="mb-4 text-primary border-bottom pb-2">2. Bảo hiểm & Thanh toán</h3>
+                        <div class="accordion" id="accordionInsurance">
+                            <div class="accordion-item mb-3 border rounded">
+                                <h2 class="accordion-header" id="headingTwo">
+                                    <button class="accordion-button collapsed fs-5 fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                                        Phòng khám liên kết với các đơn vị bảo hiểm nào?
+                                    </button>
+                                </h2>
+                                <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionInsurance">
+                                    <div class="accordion-body">
+                                        Chúng tôi chấp nhận bảo lãnh viện phí trực tiếp cho hơn 20 đối tác bảo hiểm lớn.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <h3 class="mb-4 text-primary border-bottom pb-2">3. Kết quả & Hồ sơ bệnh án</h3>
+                        <div class="accordion" id="accordionResult">
+                            <div class="accordion-item mb-3 border rounded">
+                                <h2 class="accordion-header" id="headingFour">
+                                    <button class="accordion-button collapsed fs-5 fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
+                                        Bao lâu thì có kết quả xét nghiệm?
+                                    </button>
+                                </h2>
+                                <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionResult">
+                                    <div class="accordion-body">
+                                        Kết quả có thể được trả trực tiếp hoặc gửi qua Email/Zalo bảo mật.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.5s">
+                    <div class="bg-light rounded p-4 mb-4 text-center">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-white rounded-circle mb-4" style="width: 80px; height: 80px;">
+                            <i class="fa fa-headset text-primary fs-2"></i>
+                        </div>
+                        <h4>Tổng đài 24/7</h4>
+                        <p class="mb-4">Giải đáp mọi thắc mắc về y tế và dịch vụ khẩn cấp.</p>
+                        <a href="tel:0985188888" class="btn btn-primary w-100 py-3">Gọi ngay 0985.188.888</a>
+                    </div>
+
+                    <div class="bg-light rounded p-4 text-center">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-white rounded-circle mb-4" style="width: 80px; height: 80px;">
+                            <i class="fa fa-comments text-primary fs-2"></i>
+                        </div>
+                        <h4>Chat trực tuyến</h4>
+                        <p class="mb-4">Chat với bác sĩ tư vấn để được hỗ trợ đặt lịch nhanh.</p>
+                        <button id="btnStartChat" class="btn btn-outline-primary w-100 py-3" onclick="toggleChat()">Bắt đầu Chat</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid bg-dark text-light footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-light mb-4">Địa chỉ</h5>
+                    <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>Lê Văn Việt, TP.Thủ Đức</p>
+                    <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>02/09/2024</p>
+                    <p class="mb-2"><i class="fa fa-envelope me-3"></i>Klinik@gmail.com</p>
+                    <div class="d-flex pt-2">
+                        <a class="btn btn-outline-light btn-social rounded-circle" href=""><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-outline-light btn-social rounded-circle" href=""><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-outline-light btn-social rounded-circle" href=""><i class="fab fa-youtube"></i></a>
+                        <a class="btn btn-outline-light btn-social rounded-circle" href=""><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+               <div class="col-lg-3 col-md-6">
+                    <h5 class="text-light mb-4">Dịch vụ</h5>
+                    <a class="btn btn-link" href="tim-mach.html">Tim mạch</a>
+                    <a class="btn btn-link" href="phoi.html">Phổi</a>
+                    <a class="btn btn-link" href="than-kinh.html">Thần kinh học</a>
+                    <a class="btn btn-link" href="chinh-hinh.html">Chỉnh hình</a>
+                    <a class="btn btn-link" href="nha-khoa.html">Phẩu thuật nha khoa</a>
+                    <a class="btn btn-link" href="xet-nghiem.html">Phòng thí nghiệm</a>
+                </div>
+               <div class="col-lg-3 col-md-6">
+                    <h5 class="text-light mb-4">Đường dẫn nhanh</h5>
+                    <a class="btn btn-link" href="about.html">Về chúng tôi</a>
+                    <a class="btn btn-link" href="contact.html">Liên hệ chúng tôi</a>
+                    <a class="btn btn-link" href="service.html">Dịch vụ</a>
+                    <a class="btn btn-link" href="dieu-khoan.html">Điều khoản & Điều kiện</a>
+                    <a class="btn btn-link" href="ho-tro.html">Hỗ trợ</a>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-light mb-4">Bản tin</h5>
+                    <p>Đăng ký để nhận thông tin sức khỏe mới nhất.</p>
+                    <div class="position-relative mx-auto" style="max-width: 400px;">
+                        <input class="form-control border-0 w-100 py-3 ps-4 pe-5" type="text" placeholder="Email của bạn">
+                        <button type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">Đăng ký</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="copyright">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                        &copy; <a class="border-bottom" href="#">Hihi</a>, All Right Reserved.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   <div id="chat-widget">
+    <div class="chat-header">
+        <div class="doctor-info">
+            <img src="https://img.freepik.com/free-photo/smiling-doctor-with-strethoscope-isolated-grey_651396-974.jpg?w=200" alt="Doctor">
+            <div>
+                <h5>BS. Minh Anh</h5>
+                <small><i class="fa fa-circle text-success" style="font-size: 8px;"></i> Trực tuyến</small>
+            </div>
+        </div>
+        <div class="chat-actions">
+            <button onclick="startCall('voice')" title="Gọi điện"><i class="fa fa-phone"></i></button>
+            <button onclick="startCall('video')" title="Gọi Video"><i class="fa fa-video"></i></button>
+            <button onclick="toggleChat()"><i class="fa fa-times"></i></button>
+        </div>
+    </div>
+
+    <div id="call-overlay">
+        <video id="video-stream" autoplay playsinline muted></video>
+
+        <div class="call-info">
+            <img src="https://img.freepik.com/free-photo/smiling-doctor-with-strethoscope-isolated-grey_651396-974.jpg?w=200" class="call-avatar" id="callAvatar">
+            <h5 class="mt-2">BS. Minh Anh</h5>
+            <p class="call-status" id="callStatus">Đang kết nối...</p>
+            <div class="call-timer" id="callTimer">00:00</div>
+        </div>
+
+        <div class="call-controls">
+            <button class="control-btn btn-mute" onclick="toggleMute()"><i class="fa fa-microphone"></i></button>
+            <button class="control-btn btn-end" onclick="endCall()"><i class="fa fa-phone-slash"></i></button>
+        </div>
+    </div>
+
+    <div class="chat-body" id="chatBody">
+        <div class="message doctor">
+            Xin chào! Tôi là bác sĩ trực tuyến của Klinik. Tôi có thể giúp gì cho bạn hôm nay?
+        </div>
+        <div class="typing-indicator" id="typingIndicator">Bác sĩ đang nhập...</div>
+    </div>
+
+    <div class="chat-footer">
+        <input type="text" id="chatInput" placeholder="Nhập tin nhắn..." onkeypress="handleEnter(event)">
+        <button onclick="sendMessage()"><i class="fa fa-paper-plane"></i></button>
+    </div>
+</div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/counterup/counterup.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="js/main.js"></script>
+
+    <script>
+        // === LOGIC CHO CHAT ===
+        function toggleChat() {
+            const chatWidget = document.getElementById('chat-widget');
+            if (chatWidget.style.display === 'none' || chatWidget.style.display === '') {
+                chatWidget.style.display = 'flex';
+                setTimeout(() => document.getElementById('chatInput').focus(), 100);
+            } else {
+                chatWidget.style.display = 'none';
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const messageText = input.value.trim();
+            const chatBody = document.getElementById('chatBody');
+
+            if (messageText !== "") {
+                addMessage(messageText, 'user');
+                input.value = "";
+                
+                const typingIndicator = document.getElementById('typingIndicator');
+                typingIndicator.style.display = 'block';
+                chatBody.scrollTop = chatBody.scrollHeight;
+
+                setTimeout(() => {
+                    typingIndicator.style.display = 'none';
+                    const botReply = getAutoReply(messageText);
+                    addMessage(botReply, 'doctor');
+                }, 1500);
+            }
+        }
+
+        function handleEnter(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function addMessage(text, sender) {
+            const chatBody = document.getElementById('chatBody');
+            const typingIndicator = document.getElementById('typingIndicator');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${sender} animate__animated animate__fadeInUp`;
+            msgDiv.innerText = text;
+            chatBody.insertBefore(msgDiv, typingIndicator);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        function getAutoReply(userMsg) {
+            const msg = userMsg.toLowerCase();
+            if (msg.includes('đặt lịch') || msg.includes('hẹn')) {
+                return "Bạn muốn đặt lịch khám chuyên khoa nào ạ? Bạn có thể để lại số điện thoại, lễ tân sẽ gọi lại ngay.";
+            } else if (msg.includes('giá') || msg.includes('chi phí')) {
+                return "Chi phí khám tổng quát là 300.000đ. Bạn có BHYT không ạ?";
+            } else if (msg.includes('địa chỉ') || msg.includes('ở đâu')) {
+                return "Phòng khám nằm tại đường Lê Văn Việt, TP. Thủ Đức bạn nhé.";
+            } else {
+                return "Cảm ơn bạn đã nhắn tin. Bác sĩ chuyên khoa sẽ phản hồi lại trong giây lát. Vui lòng giữ máy.";
+            }
+        }
+
+        // === LOGIC CHO GOOGLE SEARCH ===
+        function executeGoogleSearch() {
+            var keyword = document.getElementById("googleSearchInput").value;
+            
+            if (keyword.trim() !== "") {
+                var brandName = "Klinik"; 
+                var finalQuery = brandName + " " + keyword;
+                var googleUrl = "https://www.google.com/search?q=" + encodeURIComponent(finalQuery);
+                window.open(googleUrl, '_blank');
+            } else {
+                var searchBox = document.querySelector('.search-box');
+                searchBox.style.animation = "shake 0.5s";
+                setTimeout(() => searchBox.style.animation = "", 500);
+                document.getElementById("googleSearchInput").focus();
+            }
+        }
+
+        function handleSearchEnter(event) {
+            if (event.key === "Enter") {
+                executeGoogleSearch();
+            }
+        }
+
+        function quickSearch(text) {
+            document.getElementById("googleSearchInput").value = text;
+            executeGoogleSearch();
+        }
+        // ... (Giữ nguyên code Google Search và Chat cũ ở trên) ...
+
+    // === LOGIC XỬ LÝ CUỘC GỌI (WEBRTC) ===
+    let localStream;
+    let callTimerInterval;
+    let seconds = 0;
+
+    async function startCall(type) {
+        const overlay = document.getElementById('call-overlay');
+        const videoElem = document.getElementById('video-stream');
+        const avatar = document.getElementById('callAvatar');
+        const status = document.getElementById('callStatus');
+
+        overlay.style.display = 'flex'; // Hiện màn hình gọi
+        status.innerText = "Đang kết nối máy chủ...";
+        
+        try {
+            // Yêu cầu quyền truy cập Camera/Micro
+            const constraints = {
+                audio: true,
+                video: type === 'video' // Chỉ bật video nếu chọn gọi video
+            };
+
+            localStream = await navigator.mediaDevices.getUserMedia(constraints);
+
+            if (type === 'video') {
+                videoElem.srcObject = localStream;
+                videoElem.style.display = 'block'; // Hiện video
+                avatar.style.display = 'none'; // Ẩn avatar để hiện video
+            } else {
+                videoElem.style.display = 'none';
+                avatar.style.display = 'block'; // Hiện avatar nếu chỉ gọi tiếng
+            }
+
+            status.innerText = "Đã kết nối";
+            startTimer();
+
+        } catch (err) {
+            console.error("Lỗi truy cập media:", err);
+            status.innerText = "Không thể truy cập Camera/Micro!";
+            alert("Vui lòng cho phép trình duyệt truy cập Camera và Micro để gọi.");
+            endCall();
+        }
+    }
+
+    function endCall() {
+        const overlay = document.getElementById('call-overlay');
+        const videoElem = document.getElementById('video-stream');
+
+        // Dừng stream (tắt đèn camera)
+        if (localStream) {
+            localStream.getTracks().forEach(track => track.stop());
+        }
+
+        // Reset giao diện
+        overlay.style.display = 'none';
+        videoElem.srcObject = null;
+        stopTimer();
+        
+        // Thêm thông báo vào chat
+        addMessage("Cuộc gọi đã kết thúc.", "user");
+    }
+
+    function toggleMute() {
+        if (localStream) {
+            const audioTrack = localStream.getAudioTracks()[0];
+            audioTrack.enabled = !audioTrack.enabled;
+            // Có thể thêm hiệu ứng đổi icon nút mute tại đây
+        }
+    }
+
+    // Logic đếm giờ
+    function startTimer() {
+        seconds = 0;
+        document.getElementById('callTimer').innerText = "00:00";
+        clearInterval(callTimerInterval);
+        callTimerInterval = setInterval(() => {
+            seconds++;
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            document.getElementById('callTimer').innerText = 
+                `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }, 1000);
+    }
+
+    function stopTimer() {
+        clearInterval(callTimerInterval);
+        seconds = 0;
+    }
+
+        // Add shake animation styles dynamically
+        var styleSheet = document.createElement("style");
+        styleSheet.innerText = `
+            @keyframes shake {
+                0% { transform: translateX(0); }
+                25% { transform: translateX(-5px); }
+                50% { transform: translateX(5px); }
+                75% { transform: translateX(-5px); }
+                100% { transform: translateX(0); }
+            }
+        `;
+        document.head.appendChild(styleSheet);
+    </script>
+
+  <!-- script account start -->
+ <script>
+    // === CẤU HÌNH CHUNG ===
+    const modal = document.getElementById('mainModal');
+    const historyModal = document.getElementById('historyModal');
+    const openBtn = document.getElementById('openLoginBtn');
+    const closeBtn = document.getElementById('closeModalBtn');
+    
+    const forms = {
+        login: document.getElementById('loginForm'),
+        register: document.getElementById('registerForm'),
+        forgot: document.getElementById('forgotForm'),
+        newPass: document.getElementById('newPassForm')
+    };
+
+    // === QUẢN LÝ DỮ LIỆU ===
+    // 1. Danh sách tài khoản
+    let users = JSON.parse(localStorage.getItem('DS_TAI_KHOAN')) || [];
+    // 2. Danh sách lịch hẹn (Mới thêm)
+    let appointments = JSON.parse(localStorage.getItem('DS_LICH_HEN')) || [];
+    // 3. Phiên đăng nhập hiện tại (Để nhớ ai đang online)
+    let currentUser = JSON.parse(localStorage.getItem('CURRENT_USER')) || null;
+
+    function saveData() {
+        localStorage.setItem('DS_TAI_KHOAN', JSON.stringify(users));
+        localStorage.setItem('DS_LICH_HEN', JSON.stringify(appointments));
+        localStorage.setItem('CURRENT_USER', JSON.stringify(currentUser));
+    }
+
+    // === CẬP NHẬT GIAO DIỆN KHI TẢI TRANG ===
+    // --- CẬP NHẬT GIAO DIỆN  ---
+    function updateUI() {
+        if (currentUser) {
+            // 1. Thay đổi nút bấm thành tên người dùng
+            openBtn.innerHTML = `<i class="fa fa-user-circle me-2"></i> ${currentUser.name}`;
+            openBtn.classList.replace('btn-dark', 'btn-outline-primary');
+            openBtn.style.fontWeight = "bold";
+            
+            // 2. Khi bấm vào tên -> Mở Modal Menu đẹp (Không dùng confirm nữa)
+            openBtn.onclick = () => {
+                document.getElementById('menuUserName').innerText = `Xin chào, ${currentUser.name}!`;
+                document.getElementById('userMenuModal').classList.add('active');
+            };
+        } else {
+            // Trạng thái chưa đăng nhập
+            openBtn.innerHTML = `<i class="fa fa-user me-2"></i> Đăng nhập`;
+            openBtn.classList.replace('btn-outline-primary', 'btn-dark');
+            openBtn.style.fontWeight = "normal";
+            openBtn.onclick = () => { modal.classList.add('active'); showForm('login'); };
+        }
+    }
+    // Chạy ngay khi load trang
+    updateUI();
+
+    // --- HÀM MỞ LỊCH SỬ TỪ MENU MỚI ---
+    function openHistoryFromMenu() {
+        // Đóng menu tài khoản trước
+        document.getElementById('userMenuModal').classList.remove('active');
+        // Mở bảng lịch sử
+        showHistory();
+    }
+
+    // --- HÀM HIỂN THỊ THÔNG  ---
+    function showCustomAlert(message, type = 'error') {
+        const modal = document.getElementById('customAlertModal');
+        const icon = document.getElementById('alertIcon');
+        const title = document.getElementById('alertTitle');
+        const msg = document.getElementById('alertMessage');
+
+        // Cấu hình giao diện dựa trên loại thông báo (success / error)
+        if (type === 'success') {
+            icon.className = "fa-solid fa-circle-check text-success"; // Icon tích xanh
+            title.innerText = "✅";
+            title.style.color = "#198754";
+        } else {
+            icon.className = "fa-solid fa-circle-exclamation text-danger"; // Icon chấm than đỏ
+            title.innerText = "⚠️";
+            title.style.color = "#dc3545";
+        }
+
+        msg.innerText = message;
+        modal.classList.add('active');
+    }
+
+    function closeCustomAlert() {
+        document.getElementById('customAlertModal').classList.remove('active');
+    }
+
+    // --- HÀM ĐĂNG XUẤT ---
+    function logout() {
+        if(confirm("Bạn có chắc chắn muốn đăng xuất không?")) {
+            currentUser = null;
+            saveData();
+            location.reload();
+        }
+    }
+    // === CÁC HÀM LOGIN / REGISTER ===
+    function showForm(name) { Object.values(forms).forEach(f => f.classList.add('hidden')); forms[name].classList.remove('hidden'); }
+    if(closeBtn) closeBtn.onclick = () => modal.classList.remove('active');
+    window.onclick = (e) => { if (e.target === modal) modal.classList.remove('active'); };
+
+    // Chuyển đổi form
+    document.getElementById('linkToRegister').onclick = (e) => { e.preventDefault(); showForm('register'); };
+    document.getElementById('linkToLoginFromRegister').onclick = (e) => { e.preventDefault(); showForm('login'); };
+    document.getElementById('linkToForgot').onclick = (e) => { e.preventDefault(); showForm('forgot'); };
+    document.getElementById('linkBackToLogin1').onclick = (e) => { e.preventDefault(); showForm('login'); };
+
+    // Xử lý Đăng ký
+    document.getElementById('btnRegisterAction').onclick = () => {
+    const name = document.getElementById('regName').value.trim();
+    const phone = document.getElementById('regPhone').value.trim();
+    const pass = document.getElementById('regPass').value;
+    // Thêm 2 dòng này
+    const cccd = document.getElementById('regCCCD').value.trim();
+    const dob = document.getElementById('regDOB').value;
+    
+    // Check đủ dữ liệu
+    if(!name || !phone || !pass || !cccd || !dob) { alert("Vui lòng điền đầy đủ thông tin!"); return; }
+    if(users.find(u => u.phone === phone)) { alert("Số điện thoại này đã tồn tại!"); return; }
+
+    // Lưu đủ 5 trường thông tin
+    users.push({ name, phone, pass, cccd, dob });
+    saveData();
+    showCustomAlert("Đăng ký thành công! Vui lòng đăng nhập ngay.", "success");
+    
+    // Chuyển giao diện về form đăng nhập ngay lập tức
+    showForm('login');
+    
+    // Tự động điền sđt vừa đăng ký vào ô đăng nhập cho tiện (tùy chọn)
+    document.getElementById('loginPhone').value = phone;
+};
+
+    // Xử lý Đăng nhập
+    document.getElementById('btnLoginAction').onclick = () => {
+        const phone = document.getElementById('loginPhone').value.trim();
+        const pass = document.getElementById('loginPass').value;
+        
+        // Tìm tài khoản trong danh sách
+        const user = users.find(u => u.phone === phone && u.pass === pass);
+        
+        if(user) {
+            currentUser = user; 
+            saveData();
+            
+            // 1. Ẩn form đăng nhập ngay
+            modal.classList.remove('active');
+            
+            // 2. Cập nhật tên người dùng lên menu
+            updateUI();
+
+            // 3. Hiện thông báo THÀNH CÔNG (Màu xanh)
+            showCustomAlert("Đăng nhập thành công! Xin chào " + user.name, "success");
+
+        } else {
+            // 4. Hiện thông báo LỖI
+            showCustomAlert("Sai số điện thoại hoặc mật khẩu!", "error");
+        }
+    };
+
+    function logout() {
+        currentUser = null;
+        saveData();
+        location.reload(); // Tải lại trang
+    }
+
+    // --- XỬ LÝ QUÊN MẬT KHẨU & ĐỔI MẬT KHẨU  ---
+    // Biến tạm lưu user đang reset pass
+    let userDangQuenMatKhau = null;
+
+    // 1. Nút Kiểm tra thông tin (Ở Modal Quên mật khẩu)
+    document.getElementById('btnCheckInfo').onclick = () => {
+        // Lấy dữ liệu nhập
+        const inputName = document.getElementById('verifyName').value.trim();
+        const inputCCCD = document.getElementById('verifyCCCD').value.trim();
+        const inputDOB = document.getElementById('verifyDOB').value;
+
+        // Tìm user khớp thông tin
+        const foundUser = users.find(user => 
+            user.name === inputName && 
+            user.cccd === inputCCCD && 
+            user.dob === inputDOB
+        );
+
+        if (foundUser) {
+            // Nếu đúng -> Lưu tạm -> Chuyển sang form đổi pass
+            userDangQuenMatKhau = foundUser;
+            showCustomAlert("Xác minh thành công! Vui lòng đặt mật khẩu mới.", "success");
+            
+            // Đợi user đọc thông báo xong mới chuyển form
+            setTimeout(() => {
+                closeCustomAlert();
+                showForm('newPass'); 
+            }, 1500);
+        } else {
+            showCustomAlert("Thông tin xác minh không chính xác!", "error");
+        }
+    };
+
+    // 2. Nút Lưu mật khẩu mới (Ở Modal Mật khẩu mới)
+    document.getElementById('btnChangePass').onclick = () => {
+        const p1 = document.getElementById('newPassMain').value;
+        const p2 = document.getElementById('newPassConfirm').value;
+
+        if (p1.length < 6) { 
+            showCustomAlert("Mật khẩu quá ngắn (tối thiểu 6 ký tự)!", "error"); 
+            return; 
+        }
+        if (p1 !== p2) { 
+            showCustomAlert("Hai mật khẩu không khớp nhau!", "error"); 
+            return; 
+        }
+
+        if (userDangQuenMatKhau) {
+            // Cập nhật mật khẩu mới cho user đó (vì là tham chiếu object nên mảng users cũng tự cập nhật)
+            userDangQuenMatKhau.pass = p1; // Lưu ý: key là 'pass' hay 'password' tùy code cũ của bạn, ở đây mình dùng 'pass' theo code đăng ký ở trên
+            
+            // Lưu lại vào LocalStorage
+            saveData();
+
+            showCustomAlert("Đổi mật khẩu thành công! Vui lòng đăng nhập lại.", "success");
+            
+            // Reset biến tạm & Quay về login
+            userDangQuenMatKhau = null;
+            setTimeout(() => {
+                closeCustomAlert();
+                showForm('login');
+            }, 1500);
+        }
+    };
+
+    // --- ĐẶT LỊCH HẸN (ĐÃ NÂNG CẤP GIAO DIỆN THÔNG BÁO) ---
+        document.getElementById('btnBookAppointment').onclick = () => {
+            // 1. Kiểm tra đăng nhập
+            if (!currentUser) {
+                // Dùng thông báo mới thay vì alert
+                showCustomAlert("Bạn cần ĐĂNG NHẬP để có thể đặt lịch hẹn!", "error");
+                
+                
+                setTimeout(() => {
+                    modal.classList.add('active'); 
+                    showForm('login');
+                }, 1500); // Delay 1.5s cho mượt
+                return;
+            }
+
+            // 2. Lấy dữ liệu
+            const pName = document.getElementById('apptName').value.trim();
+            const pDoctor = document.getElementById('apptDoctor').value;
+            const pDate = document.getElementById('apptDate').value;
+            const pTime = document.getElementById('apptTime').value;
+
+            // Kiểm tra dữ liệu trống
+            if(!pName || !pDoctor || !pDate || !pTime) { 
+                showCustomAlert("Vui lòng điền đầy đủ thông tin đặt hẹn!", "error"); 
+                return; 
+            }
+
+            // 3. Lưu lịch
+            appointments.push({
+                userAccount: currentUser.phone, 
+                patientName: pName,
+                doctor: pDoctor,
+                date: pDate,
+                time: pTime,
+                status: "Đã xác nhận"
+            });
+            saveData();
+            
+            // Thông báo thành công
+            showCustomAlert("ĐẶT LỊCH THÀNH CÔNG!\nBạn có thể kiểm tra lại trong phần Lịch sử.", "success");
+            
+            // Reset form
+            document.getElementById('appointmentForm').reset();
+        };
+
+    // === LOGIC XEM LỊCH SỬ ===
+    function showHistory() {
+        if(!currentUser) return;
+
+        const tbody = document.getElementById('historyTableBody');
+        const noMsg = document.getElementById('noHistoryMsg');
+        tbody.innerHTML = ''; // Xóa cũ
+
+        // Lọc lịch sử CỦA RIÊNG user hiện tại
+        const myHistory = appointments.filter(app => app.userAccount === currentUser.phone);
+
+        if (myHistory.length > 0) {
+            noMsg.style.display = 'none';
+            myHistory.forEach(item => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${item.time} <br> ${item.date}</td>
+                        <td>${item.doctor}</td>
+                        <td><span class="badge bg-success">${item.status}</span></td>
+                    </tr>
+                `;
+            });
+        } else {
+            noMsg.style.display = 'block';
+        }
+
+        historyModal.classList.add('active');
+    }
+</script>
+<!-- end account -->
+
+</body>
+</html>
